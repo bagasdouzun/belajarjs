@@ -1,0 +1,26 @@
+<html>
+    <head>
+        <style>
+            canvas {
+                border-style: solid;
+            }
+        </style>
+        <script>
+            window.onload = function(){
+                var canvas = document.getElementById("myCanvas");
+                var context = canvas.getContext("2d");
+
+                context.moveTo(100, 150);
+                context.lineTo(450, 50);
+                context.linewidth=100;
+                context.stroke();
+            };
+        </script>
+    </head>
+    <body>
+        <center>
+            <canvas id="myCanvas" width="640" height="480">
+            </canvas>
+        </center>
+    </body>
+</html>
