@@ -1,24 +1,127 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Canvas Animasi - Bentuk Bergerak</title>
+    <style>
+      canvas {
+        border: 1px solid black;
+      }
+    </style>
+  </head>
   <body>
-    <h1>HTML5 Canvas</h1>
-    <canvas
-      id="myCanvas"
-      width="500"
-      height="100"
-      style="border: 1px solid #000000">
-      Sorry, your browser does not support canvas.
-    </canvas>
+    <h1>Animasi: Lingkaran, Persegi, dan Segitiga Bergerak</h1>
+    <canvas id="myCanvas" width="500" height="300"></canvas>
 
     <script>
       const canvas = document.getElementById("myCanvas");
       const ctx = canvas.getContext("2d");
 
-      ctx.beginPath();
-      ctx.arc(95, 50, 40, 0, 2 * Math.PI);
-      ctx.fillStyle = "red";
-      ctx.fill();
-      ctx.lineWidth = 4;
+      // Posisi awal dan kecepatan untuk setiap bentuk
+      let circle = { x: 100, y: 100, dx: 2, dy: 2, radius: 40 };
+      let square = { x: 200, y: 50, dx: 3, dy: 3, size: 50 };
+      let triangle = {
+        x1: 350, y1: 150,
+        x2: 400, y2: 50,
+        x3: 450, y3: 150,
+        dx: 4, dy: 2
+      };
+
+      // Fungsi untuk menggambar lingkaran
+      function drawCircle() {
+        ctx.beginPath();
+        ctx.arc(circle.x, circle.y, circle.radius, 0, Math.PI * 2);
+        ctx.fillStyle = "red";
+        ctx.fill();
+        ctx.stroke();
+        ctx.closePath();
+      }
+
+      // Fungsi untuk menggambar persegi
+      function drawSquare() {
+        ctx.beginPath();
+        ctx.rect(square.x, square.y, square.size, square.size);
+        ctx.fillStyle = "blue";
+        ctx.fill();
+        ctx.stroke();
+        ctx.closePath();
+      }
+
+      // Fungsi untuk menggambar segitiga
+      function drawTriangle() {
+        ctx.beginPath();
+        ctx.moveTo(triangle.x1, triangle.y1);
+        ctx.lineTo(triangle.x2, triangle.y2);
+        ctx.lineTo(triangle.x3, triangle.y3);
+        ctx.closePath();
+        ctx.fillStyle = "green";
+        ctx.fill();
+        ctx.stroke();
+      }
+
+      // Fungsi untuk memperbarui posisi bentuk dan memeriksa batas kanvas
+      function updatePositions() {
+        // Update posisi lingkaran
+        circle.x += circle.dx;
+        circle.y += circle.dy;
+
+        // Pantulkan lingkaran jika mencapai batas kanvas
+        if (circle.x + circle.radius > canvas.width || circle.x - circle.radius < 0) {
+          circle.dx = -circle.dx;
+        }
+        if (circle.y + circle.radius > canvas.height || circle.y - circle.radius < 0) {
+          circle.dy = -circle.dy;
+        }
+
+        // Update posisi persegi
+        square.x += square.dx;
+        square.y += square.dy;
+
+        // Pantulkan persegi jika mencapai batas kanvas
+        if (square.x + square.size > canvas.width || square.x < 0) {
+          square.dx = -square.dx;
+        }
+        if (square.y + square.size > canvas.height || square.y < 0) {
+          square.dy = -square.dy;
+        }
+
+        // Update posisi segitiga
+        triangle.x1 += triangle.dx;
+        triangle.y1 += triangle.dy;
+        triangle.x2 += triangle.dx;
+        triangle.y2 += triangle.dy;
+        triangle.x3 += triangle.dx;
+        triangle.y3 += triangle.dy;
+
+        // Pantulkan segitiga jika mencapai batas kanvas
+        if (triangle.x1 < 0 || triangle.x3 > canvas.width) {
+          triangle.dx = -triangle.dx;
+        }
+        if (triangle.y2 < 0 || triangle.y1 > canvas.height) {
+          triangle.dy = -triangle.dy;
+        }
+      }
+
+      // Fungsi utama untuk menggambar dan menggerakkan bentuk
+      function animate() {
+        // Bersihkan canvas sebelum menggambar ulang
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Gambar semua bentuk
+        drawCircle();
+        drawSquare();
+        drawTriangle();
+
+        // Update posisi setiap bentuk
+        updatePositions();
+
+        // Panggil kembali fungsi animate
+        requestAnimationFrame(animate);
+      }
+
+      // Mulai animasi
+      animate();
     </script>
   </body>
 </html>
